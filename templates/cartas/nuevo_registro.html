@@ -1,0 +1,84 @@
+{% extends 'cartas/indice.html' %}
+{% block title %} Nuevo Registro {% endblock %}
+{% block principal %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Nuevo Registro</h2>
+    <hr class="title">
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="panel panel-primary">
+        <div class="panel-heading right-align clearfix"><span class="panel-title">Datos pensionado</span></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="numero_social">Número social</label>
+                    {{ pensionado.numero_social }}
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="nombre">Nombre</label>
+                    {{ pensionado.nombre }}
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="edad">Edad</label>
+                    {{ pensionado.edad }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="direccion">Dirección</label>
+                    {{ pensionado.direccion }}
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="ciudad">Ciudad</label>
+                    {{ pensionado.ciudad }}
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="estado">Estado</label>
+                    {{ pensionado.estado }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading right-align clearfix"><span class="panel-title">Datos crédito</span></div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label for="capacidad">Capacidad de crédito</label>
+                    <br>
+                    <input type="number" id="capacidad" value="{{ credito.capacidad }}">
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="liquido">Líquido</label>
+                    <br>
+                    <input type="number" id="liquido" value="{{ credito.liquido }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+            <div class="panel-heading right-align clearfix"><span class="panel-title">Datos deuda</span></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group col-sm-4">
+                        <label for="empresa">Nombre empresa</label>
+                        <br>
+                        <input type="text" id="empresa" value="{{ deuda.empresa }}">
+                    </div>
+                    <div class="form-group col-sm-4">
+                            <label for="cantidad_pagos">Cantidad pagos</label>
+                            <br>
+                            <input type="text" id="cantidad_pagos" value="{{ deuda.cantidad_pagos }}">
+                        </div>
+                    <div class="form-group col-sm-4">
+                        <label for="cantidad">Cantidad</label>
+                        <br>
+                        <input type="number" id="cantidad" value="{{ deuda.cantidad }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    <button type="submit" class="btn btn-primary pull-right">Guardar</button>
+</form>
+{% endblock %}

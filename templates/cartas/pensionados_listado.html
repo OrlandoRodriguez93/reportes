@@ -1,0 +1,52 @@
+{% extends 'cartas/indice.html' %}
+{% block title %} Listado Pensionados {% endblock %}
+{% block principal %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Listado de pensionados</h2>
+    <hr class="title">
+</div>
+
+<div class="table-responsive">
+    <!-- <form method="get" class="form-inline" action="{% url 'cartas:pensionados_list' %}">
+        <div class="form-group">
+            <label for="buscar" class="sr-only">Buscar:</label>
+            <input type="text" class="form-control" value="{{filtro}}">
+        </div>
+        <button type="submit" class="btn btn-default">Buscar</button>
+    </form> -->
+    <table class="table table-striped">
+        <thead class="thead-color-dark">
+            <tr>
+                <th>#</th>
+                <th>Numero social</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Direccion</th>
+                <th>Ciudad</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if pensionados %}
+            {% for pensionado in pensionados %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ pensionado.numero_social }}</td>
+                <td>{{ pensionado.nombre }}</td>
+                <td>{{ pensionado.edad }}</td>
+                <td>{{ pensionado.direccion }}</td>
+                <td>{{ pensionado.ciudad }}</td>
+                <td>{{ pensionado.estado }}</td>
+                <td><a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span
+                            class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <p>No hay pensionados dados de alta.</p>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

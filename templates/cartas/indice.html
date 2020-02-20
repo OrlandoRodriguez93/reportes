@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block header %}
+<nav class="navbar navbar-inverse mb-0">
+    <a class="navbar-brand col-sm-3 col-md-2 ml-10" href="#">Mary's Software Inc.</a>
+</nav>
+{% endblock %}
+{% block leftcontent %}
+<div class="row">
+    <nav class="col-sm-12 nav navbar-right">
+        <ul class="nav">
+            <li class="navbar-brand">
+                <a class="nav-link" href="{% url 'cartas:indice' %}">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                    Inicio <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="navbar-brand">
+                <a class="nav-link" onclick="return abrir_modal('{% url 'cartas:leer_reporte' %}')">
+                    <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                    Agregar Reporte
+                </a>
+            </li>
+            <li class="navbar-brand">
+                <a class="nav-link" href="{% url 'cartas:pensionados_list' %}">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Pensionados
+                </a>
+            </li>
+            <li class="navbar-brand">
+                <a class="nav-link" href="#">
+                    <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                    Archivos
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}
+{% block content %}
+<main role="main" class="col-sm-12 ml-sm-auto col-lg-12">
+    {% block principal %}
+    <div class="jumbotron m-middle">
+        <div class="container">
+            <h1>¡Bienvenida María!</h1>
+            <p>Si no sabes por dónde comenzar puedes empezar creando un registro nuevo dando clic en el botón 'Agregar
+                reporte'.</p>
+            <p>
+                <a onclick="return abrir_modal('{% url 'cartas:leer_reporte' %}')" class="btn btn-primary btn-lg">Agregar
+                    reporte</a>
+            </p>
+        </div>
+    </div>
+    
+    {% endblock %}
+    <div id="popup" class="modal" role="dialog"></div>
+</main>
+{% endblock %}
+{% block extrajs %}
+<script>
+    $('#nuevoRegistro').live('submit', function () {
+        $.ajax({
+            type: $(this).attr('method'),
+            url: this.action,
+            data: $(this).serialize(),
+            context: this,
+            success: function (data, status) {
+                $('#contactModal').html(data);
+            }
+        });
+        return false;
+    });
+
+    function abrir_modal(url) {
+        $('#popup').load(url, function () {
+            $(this).modal('show');
+        });
+        return false;
+    }
+
+    function cerrar_modal() {
+        $('#popup').modal('hide');
+        return false;
+    }
+</script>
+{% endblock %}

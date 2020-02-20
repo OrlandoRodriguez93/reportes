@@ -1,0 +1,55 @@
+{% extends 'cartas/indice.html' %}
+{% block title %} Nuevo Registro {% endblock %}
+{% block principal %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h2>Detalle Pensionado</h2>
+    <hr class="title">
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading right-align clearfix"><span class="panel-title">{{ pensionado.nombre }}</span> <span
+            type="submit" class="btn btn-primary pull-right">Editar registro</span></div>
+    <div class="panel-body">
+        <form>
+            <div class="row">
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="numero_social">Número social</label>
+                    <p>{{ pensionado.numero_social }}</p>
+                </div>
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="nombre">Nombre</label>
+                    <p>{{ pensionado.nombre }}</p>
+                </div>
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="edad">Edad</label>
+                    <p>{{ pensionado.edad }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="edad">Dirección</label>
+                    <p>{{ pensionado.direccion }}</p>
+                </div>
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="ciudad">Ciudad</label>
+                    <p>{{ pensionado.ciudad }}</p>
+                </div>
+                <div class="form-group col-sm-4 text-detail">
+                    <label for="estado">Estado</label>
+                    <p>{{ pensionado.estado }}</p>
+                </div>
+            </div>
+            <!-- <div class="form-group">
+                <label for="exampleInputFile">Edad</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+            </div> -->
+            <!-- <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Check me out
+                </label>
+            </div> -->
+        </form>
+    </div>
+</div>
+
+{% endblock %}
