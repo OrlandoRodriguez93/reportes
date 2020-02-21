@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # 'django_filters',
     'PyPDF2',
     'tabula',
+    'docx',
     'apps.cartas',
 ]
 

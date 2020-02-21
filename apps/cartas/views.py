@@ -14,8 +14,10 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, DeleteView, DetailView, View
 from django.views.generic.edit import FormMixin
 
+from docx import Document
 from .models import Pensionado, Reporte, Credito, Deuda
 from .forms import PensionadoForm, UploadDocumentForm
+from .utils import sobreescribir_carta
 
 from django.shortcuts import render
 
@@ -140,8 +142,9 @@ class LeerReporteView(CreateView, FormMixin):
             cantidad = self.datos_pensionado['deuda_cantidad'].replace(",","")
             deuda.cantidad = float(cantidad)
             deuda.save()
+        #modificar
+        sobreescribir_carta(pensionado.nombre, str(credito.capacidad))
 
-    
         return redirect(reverse('cartas:nuevo_registro', kwargs={'pk':pensionado.pk}))
 
     def convertir_csv(self, ruta_pdf):
@@ -231,4 +234,3 @@ class LeerReporteView(CreateView, FormMixin):
         self.datos_pensionado['edad'] = edad
         self.datos_pensionado['liquido'] = liquido
         self.datos_pensionado['capacidad'] = capacidad
-        
