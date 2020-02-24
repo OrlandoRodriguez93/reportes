@@ -1,0 +1,62 @@
+.mt-40 {
+    margin-top: 40px;
+}
+
+.pl-0 {
+    padding-left: 0px !important;
+}
+
+.p0 {
+      padding: 0px;
+}
+
+.mb-0{
+    margin-bottom: 0px;
+}
+
+.mr-10{
+    margin-right: 10px;
+}
+
+.ml-10{
+    margin-left: 10px;
+}
+
+.thead-color-dark {
+    background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+    background-repeat: repeat-x;
+    background-color:#222;
+    color: white;
+} 
+
+.sidebar {
+    height: 100%;
+    background-color: #eee;
+}
+
+.navbar-brand {
+    width: 100%;
+    left: 0;
+    text-align: left;
+    margin:0 auto;
+}
+
+hr.title {
+    border: 2px solid;
+    border-radius: 2px;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-style: initial;
+}
+
+.m-middle {
+    margin-top: 12%;
+    margin-left: 10%;
+    margin-bottom: auto;
+}
+
+.text-detail {
+    font-size: 16px;
+}

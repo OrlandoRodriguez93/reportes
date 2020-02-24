@@ -57,19 +57,6 @@
 {% endblock %}
 {% block extrajs %}
 <script>
-    $('#nuevoRegistro').live('submit', function () {
-        $.ajax({
-            type: $(this).attr('method'),
-            url: this.action,
-            data: $(this).serialize(),
-            context: this,
-            success: function (data, status) {
-                $('#contactModal').html(data);
-            }
-        });
-        return false;
-    });
-
     function abrir_modal(url) {
         $('#popup').load(url, function () {
             $(this).modal('show');

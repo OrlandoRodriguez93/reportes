@@ -6,12 +6,12 @@ from django.utils import timezone
 
 class Pensionado(models.Model):
 
-    numero_social = models.CharField(max_length=20)
-    nombre = models.CharField(max_length=100)
-    edad = models.IntegerField(null=True)
-    direccion = models.CharField(max_length=200)
-    estado = models.CharField(max_length=50)
-    ciudad = models.CharField(max_length=50)
+    numero_social = models.CharField(max_length=20, blank=True)
+    nombre = models.CharField(max_length=100, blank=True)
+    edad = models.IntegerField(null=True, blank=True)
+    direccion = models.CharField(max_length=200, blank=True)
+    estado = models.CharField(max_length=50, blank=True)
+    ciudad = models.CharField(max_length=50, blank=True)
     creado = models.DateTimeField(default=timezone.now)
     actualizado = models.DateTimeField(auto_now_add=True)
     estatus_registro = models.IntegerField(default=0)
@@ -40,10 +40,10 @@ class Reporte(models.Model):
 
 
 class Credito(models.Model):
-    id_pensionado = models.IntegerField(null=True)
-    capacidad = models.DecimalField(max_digits=15, decimal_places=2, null=True)
-    liquido = models.DecimalField(max_digits=15, decimal_places=2, null=True)
-    id_plazo = models.IntegerField(null=True)
+    id_pensionado = models.IntegerField(null=True, blank=True)
+    capacidad = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
+    liquido = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
+    id_plazo = models.IntegerField(null=True, blank=True)
     creado = models.DateTimeField(default=timezone.now)
     actualizado = models.DateTimeField(auto_now_add=True)
     estatus_registro = models.IntegerField(default=0)
@@ -56,10 +56,10 @@ class Credito(models.Model):
         super(Credito, self).save(*args, **kwargs) 
 
 class Deuda(models.Model):
-    id_pensionado = models.IntegerField(null=True)
-    empresa = models.CharField(max_length=100, null=True)
-    cantidad_pagos = models.CharField(max_length=100, default="0/0")
-    cantidad = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    id_pensionado = models.IntegerField(null=True, blank=True)
+    empresa = models.CharField(max_length=100, null=True, blank=True)
+    cantidad_pagos = models.CharField(max_length=100, default="0/0", blank=True)
+    cantidad = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     creado = models.DateTimeField(default=timezone.now)
     actualizado = models.DateTimeField(auto_now_add=True)
     estatus_registro = models.IntegerField(default=0)
