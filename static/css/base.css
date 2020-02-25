@@ -22,10 +22,8 @@
     margin-left: 10px;
 }
 
-.thead-color-dark {
-    background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
-    background-repeat: repeat-x;
-    background-color:#222;
+.thead-primary {
+    background-color:#337ab7;
     color: white;
 } 
 
@@ -39,6 +37,8 @@
     left: 0;
     text-align: left;
     margin:0 auto;
+    list-style: none;
+    position:absolute;
 }
 
 hr.title {
@@ -60,3 +60,10 @@ hr.title {
 .text-detail {
     font-size: 16px;
 }
+
+.scroll-table {
+    overflow:scroll;
+    height:60%;
+}
+      
+  

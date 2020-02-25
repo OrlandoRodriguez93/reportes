@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block header %}
-<nav class="navbar navbar-inverse mb-0">
+<nav class="navbar navbar-inverse mb-0 nav-header">
     <a class="navbar-brand col-sm-3 col-md-2 ml-10" href="#">Mary's Software Inc.</a>
 </nav>
 {% endblock %}
@@ -68,5 +68,6 @@
         $('#popup').modal('hide');
         return false;
     }
+    $('[data-toggle="tooltip"]').tooltip();
 </script>
 {% endblock %}

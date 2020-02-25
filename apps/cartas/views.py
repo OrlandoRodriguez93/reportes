@@ -113,9 +113,12 @@ class RegistroCreateView(UpdateView):
         return self.render_to_response(context)
 
 class PensionadoListView(ListView):
+    paginate_by = 20
     model = Pensionado
     context_object_name = 'pensionados'
     template_name = "cartas/pensionados_listado.html"
+    ordering = ['-creado']
+
 
     # def get_queryset(self):
     #     filtro = self.request.GET.get('filtro', 'nombre')

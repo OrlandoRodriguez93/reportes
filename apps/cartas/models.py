@@ -73,17 +73,17 @@ class Deuda(models.Model):
 
 
 class Plazo(models.Model):
-    meses_plazo = models.IntegerField()
-    cantidad_a_prestar = models.DecimalField(max_digits=15, decimal_places=2)
-    cantidad_pensionado = models.DecimalField(max_digits=15, decimal_places=2)
+    meses_plazo = models.IntegerField(null=True, blank=True)
+    monto_solicitado = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
+    pago = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     creado = models.DateTimeField(default=timezone.now)
     actualizado = models.DateTimeField(auto_now_add=True)
     estatus_registro = models.IntegerField(default=0)
 
     def __str__(self):
-        return "meses: %s" % (self.meses_plazo)
+        return "meses: %s - monto: %s" % (self.meses_plazo, self.monto_solicitado)
 
     def save(self):
         self.actualizado = timezone.now()
-        super(Plazo, self).save(*args, **kwargs) 
+        super(Plazo, self).save(*args, **kwargs)
 

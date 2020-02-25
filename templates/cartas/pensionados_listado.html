@@ -6,7 +6,7 @@
     <hr class="title">
 </div>
 
-<div class="table-responsive">
+<div class="table-responsive scroll-table">
     <!-- <form method="get" class="form-inline" action="{% url 'cartas:pensionados_list' %}">
         <div class="form-group">
             <label for="buscar" class="sr-only">Buscar:</label>
@@ -15,31 +15,30 @@
         <button type="submit" class="btn btn-default">Buscar</button>
     </form> -->
     <table class="table table-striped">
-        <thead class="thead-color-dark">
+        <thead class="thead-primary">
             <tr>
-                <th>#</th>
-                <th>Numero social</th>
-                <th>Nombre</th>
-                <th>Edad</th>
-                <th>Direccion</th>
-                <th>Ciudad</th>
-                <th>Estado</th>
-                <th></th>
+                <th class="text-center">#</th>
+                <th class="text-center">Numero social</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Edad</th>
+                <th class="text-center">Ciudad</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% if pensionados %}
             {% for pensionado in pensionados %}
-            <tr>
+            <tr class="text-center">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ pensionado.numero_social }}</td>
                 <td>{{ pensionado.nombre }}</td>
-                <td>{{ pensionado.edad }}</td>
-                <td>{{ pensionado.direccion }}</td>
+                <td>{{ pensionado.edad }} años</td>
                 <td>{{ pensionado.ciudad }}</td>
                 <td>{{ pensionado.estado }}</td>
-                <td><a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span
-                            class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
+                <td class="text-center">
+                    <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver Detalle"></span></a>
+                    <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver Detalle"></span></a>
                 </td>
             </tr>
             {% endfor %}
@@ -49,4 +48,24 @@
         </tbody>
     </table>
 </div>
+
+<nav class="text-center">
+    {% if is_paginated %}
+    <ul class="pagination pull-center">
+        {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+        {% endif %}
+
+        {% for i in paginator.page_range %}
+        <li {% if page_obj.number == i %} class="active" {% endif %}>
+            <a href="?page={{i}}">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</nav>
 {% endblock %}

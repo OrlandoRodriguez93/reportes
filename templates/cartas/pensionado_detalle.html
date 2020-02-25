@@ -5,7 +5,8 @@
     <h2>Detalle Pensionado  
         <a href="{% url 'cartas:nuevo_registro' pk=pensionado.pk %}">
             <span class="btn btn-primary pull-right" aria-hidden="true">
-            Editar pensionado <span class="sr-only">(current)</span>
+                <span class="glyphicon glyphicon-edit"></span> Editar pensionado 
+            </span>
         </a>
     </h2> 
     <hr class="title">
@@ -74,7 +75,7 @@
                 </div>
                 <div class="form-group col-sm-4">
                     <label for="cantidad">Cantidad:</label>
-                    <p>{{ deuda.cantidad }}</p>
+                    <p>$ {{ deuda.cantidad }}</p>
                 </div>
             </div>
         </div>
