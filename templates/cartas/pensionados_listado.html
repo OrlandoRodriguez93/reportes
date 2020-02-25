@@ -38,7 +38,8 @@
                 <td>{{ pensionado.estado }}</td>
                 <td class="text-center">
                     <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver Detalle"></span></a>
-                    <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver Detalle"></span></a>
+                    <a href="{# url 'cartas:generar_carta' pk=pensionado.pk #}"><span class="glyphicon glyphicon-file" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Generar carta"></span></a>
+                    <a href="{# url 'cartas:generar_sobre' pk=pensionado.pk #}"><span class="glyphicon glyphicon-envelope" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Generar sobre"></span></a>
                 </td>
             </tr>
             {% endfor %}
