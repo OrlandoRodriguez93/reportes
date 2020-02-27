@@ -4,6 +4,13 @@
 from django.db import models
 from django.utils import timezone
 
+PLAZO_CHOICES =( 
+    ("1", "24"), 
+    ("2", "36"), 
+    ("3", "48"), 
+    ("4", "60"),
+) 
+
 class Pensionado(models.Model):
 
     numero_social = models.CharField(max_length=20, blank=True)
@@ -73,7 +80,7 @@ class Deuda(models.Model):
 
 
 class Plazo(models.Model):
-    meses_plazo = models.IntegerField(null=True, blank=True)
+    meses_plazo = models.CharField(max_length=2, choices=PLAZO_CHOICES, blank=True, default="48", null=True)
     monto_solicitado = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     pago = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     creado = models.DateTimeField(default=timezone.now)
@@ -82,8 +89,8 @@ class Plazo(models.Model):
 
     def __str__(self):
         return "meses: %s - monto: %s" % (self.meses_plazo, self.monto_solicitado)
-
-    def save(self):
+    
+    def save(self, *args, **kwargs):
         self.actualizado = timezone.now()
-        super(Plazo, self).save(*args, **kwargs)
+        super(Plazo, self).save(*args, **kwargs) 
 

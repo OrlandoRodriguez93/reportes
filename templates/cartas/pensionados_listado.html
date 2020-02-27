@@ -7,13 +7,6 @@
 </div>
 
 <div class="table-responsive scroll-table">
-    <!-- <form method="get" class="form-inline" action="{% url 'cartas:pensionados_list' %}">
-        <div class="form-group">
-            <label for="buscar" class="sr-only">Buscar:</label>
-            <input type="text" class="form-control" value="{{filtro}}">
-        </div>
-        <button type="submit" class="btn btn-default">Buscar</button>
-    </form> -->
     <table class="table table-striped">
         <thead class="thead-primary">
             <tr>
@@ -37,9 +30,15 @@
                 <td>{{ pensionado.ciudad }}</td>
                 <td>{{ pensionado.estado }}</td>
                 <td class="text-center">
-                    <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Ver Detalle"></span></a>
-                    <a href="{# url 'cartas:generar_carta' pk=pensionado.pk #}"><span class="glyphicon glyphicon-file" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Generar carta"></span></a>
-                    <a href="{# url 'cartas:generar_sobre' pk=pensionado.pk #}"><span class="glyphicon glyphicon-envelope" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Generar sobre"></span></a>
+                    <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span
+                            class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip"
+                            data-placement="top" title="Ver Detalle"></span></a>
+                    <a><span class="glyphicon glyphicon-file" id="generar_carta" id_pensionado="{{ pensionado.pk }}"
+                            aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                            title="Generar carta"></span></a>
+                    <a><span class="glyphicon glyphicon-envelope" id="generar_sobre" id_pensionado="{{ pensionado.pk }}"
+                            aria-hidden="true" data-toggle="tooltip" data-placement="top"
+                            title="Generar sobre"></span></a>
                 </td>
             </tr>
             {% endfor %}
@@ -69,4 +68,55 @@
     </ul>
     {% endif %}
 </nav>
+{% endblock %}
+{% block extrajs %}
+<script>
+    $("body").on('click', '#generar_carta', function () {
+        var id_pensionado = $(this).attr('id_pensionado');
+
+        $.ajax({
+            url: '/pensionado/generar-carta/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'id_pensionado': id_pensionado
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                alert("Carta generada correctamente.");
+            },
+            error: function (data) {
+                if (data.responseJSON.message) {
+                    alert(data.responseJSON.message);
+                } else {
+                    alert('Ocurrió un error al generar la carta. Pregúntale a Orlando.');
+                }
+            }
+        });
+    });
+
+    $("body").on('click', '#generar_sobre', function () {
+        var id_pensionado = $(this).attr('id_pensionado');
+
+        $.ajax({
+            url: '/pensionado/generar-sobre/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'id_pensionado': id_pensionado
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                alert("Sobre generado correctamente.");
+            },
+            error: function (data) {
+                if (data.responseJSON.message) {
+                    alert(data.responseJSON.message);
+                } else {
+                    alert('Ocurrió un error al generar el sobre. Pregúntale a Orlando.');
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

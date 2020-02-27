@@ -2,13 +2,13 @@
 {% block title %} Detalle Pensionado {% endblock %}
 {% block principal %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h2>Detalle Pensionado  
-        <a href="{% url 'cartas:nuevo_registro' pk=pensionado.pk %}">
+    <h2>Detalle Pensionado
+        <a href="{% url 'cartas:pensionado_actualizar' pk=pensionado.pk %}">
             <span class="btn btn-primary pull-right" aria-hidden="true">
-                <span class="glyphicon glyphicon-edit"></span> Editar pensionado 
+                <span class="glyphicon glyphicon-edit"></span> Editar pensionado
             </span>
         </a>
-    </h2> 
+    </h2>
     <hr class="title">
 </div>
 <form>
@@ -49,14 +49,24 @@
         <div class="panel-heading right-align clearfix"><span class="panel-title">Datos crédito</span></div>
         <div class="panel-body">
             <div class="row">
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-3">
                     <label for="capacidad">Capacidad de crédito:</label>
                     <p>$ {{ credito.capacidad }}</p>
                 </div>
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-3">
                     <label for="liquido">Líquido:</label>
                     <p>$ {{ credito.liquido }}</p>
                 </div>
+                {% if plazo %}
+                <div class="form-group col-sm-3">
+                    <label for="plazo">Plazo:</label>
+                    <p>{{ plazo.meses_plazo }} meses</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="monto">Monto préstamo:</label>
+                    <p>$ {{ plazo.monto_solicitado }}</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
