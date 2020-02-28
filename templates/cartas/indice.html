@@ -21,7 +21,7 @@
                 </a>
             </li>
             <li class="navbar-brand">
-                <a class="nav-link" href="{% url 'cartas:pensionados_list' %}">
+                <a class="nav-link" href="{% url 'cartas:pensionados_list' filtro='todos' %}">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                     Pensionados
                 </a>
@@ -51,12 +51,13 @@
             <p>Si no sabes por dónde comenzar puedes empezar creando un registro nuevo dando clic en el botón 'Agregar
                 reporte'.</p>
             <p>
-                <a onclick="return abrir_modal('{% url 'cartas:leer_reporte' %}')" class="btn btn-primary btn-lg">Agregar
+                <a onclick="return abrir_modal('{% url 'cartas:leer_reporte' %}')"
+                    class="btn btn-primary btn-lg">Agregar
                     reporte</a>
             </p>
         </div>
     </div>
-    
+
     {% endblock %}
     <div id="popup" class="modal" role="dialog"></div>
 </main>
@@ -75,5 +76,57 @@
         return false;
     }
     $('[data-toggle="tooltip"]').tooltip();
+
+    $("body").on('click', '#generar_archivos', function () {
+        var id_pensionado = $(this).attr('id_pensionado');
+
+        $.ajax({
+            url: '/pensionado/generar-archivos/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'id_pensionado': id_pensionado
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                alert("Archivos generados correctamente.");
+            },
+            error: function (data) {
+                if (data.responseJSON.message) {
+                    alert(data.responseJSON.message);
+                } else {
+                    alert('Ocurrió un error al generar el sobre. Pregúntale a Orlando.');
+                }
+            }
+        });
+    });
+
+    $("body").on('change', '#id_meses_plazo', function () {
+        var plazo = $(this).val();
+        obtenerMonto(plazo)
+    });
+
+    function obtenerMonto(plazo) {
+        $.ajax({
+            url: '/pensionado/buscar-monto/',
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                'id_pensionado': '{{object.pk}}',
+                'plazo': plazo
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                $('#id_monto_solicitado').val(data.monto)
+            },
+            error: function (data) {
+                if (data.responseJSON.message) {
+                    alert(data.responseJSON.message);
+                } else {
+                    alert('Ocurrió un error al obtener el monto. Pregúntale a Orlando.');
+                }
+            }
+        });
+    }
 </script>
 {% endblock %}

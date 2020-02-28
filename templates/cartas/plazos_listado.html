@@ -4,10 +4,11 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h2>
         Listado de plazos activos
-        <a onclick="return abrir_modal('{% url 'cartas:alta_plazos' %}')" class="btn btn-primary btn-lg pull-right "><span class="glyphicon glyphicon-save-file
+        <a onclick="return abrir_modal('{% url 'cartas:alta_plazos' %}')"
+            class="btn btn-primary btn-lg pull-right "><span class="glyphicon glyphicon-save-file
             "></span> Dar de alta plazos</a>
     </h2>
-    <hr class="title"> 
+    <hr class="title">
 </div>
 
 <div class="table-responsive scroll-table">
@@ -23,16 +24,18 @@
         </thead>
         <tbody>
             {% if plazos %}
-                {% for monto, plazos in plazos.items %}
-                    <tr class="text-center">
-                        <td>$ {{ monto }}</td>
-                        {% for plazo in plazos %}
-                            <td>$ {{ plazo.1}}</td>
-                        {% endfor %}
-                    </tr>
+            {% for monto, plazos in plazos.items %}
+            <tr class="text-center">
+                <td>$ {{ monto }}</td>
+                {% for plazo in plazos %}
+                <td>$ {{ plazo.1}}</td>
                 {% endfor %}
+            </tr>
+            {% endfor %}
             {% else %}
-            <p>No hay plazos dados de alta.</p>
+            <tr class="text-center">
+                <td colspan="5">No hay plazos dados de alta.</td>
+            </tr>
             {% endif %}
         </tbody>
     </table>

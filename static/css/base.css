@@ -2,6 +2,10 @@
     margin-top: 40px;
 }
 
+.mt-5 {
+    margin-top:5px;
+}
+
 .pl-0 {
     padding-left: 0px !important;
 }
@@ -18,8 +22,16 @@
     margin-right: 10px;
 }
 
+.mr-15{
+    margin-right: 15px;
+}
+
 .ml-10{
     margin-left: 10px;
+}
+
+.fs-22 {
+    font-size: 24px;
 }
 
 .thead-primary {

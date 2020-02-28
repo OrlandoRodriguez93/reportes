@@ -3,12 +3,16 @@
 from django import forms
 from .models import Pensionado, Reporte, Credito, Deuda, Plazo, PLAZO_CHOICES
 
+PLAZO_CHOICES_FORM = (
+    ("", "---------"),
+) + PLAZO_CHOICES
+
 
 class PensionadoForm(forms.ModelForm):
 
     capacidad = forms.CharField()
     liquido = forms.CharField()
-    meses_plazo = forms.ChoiceField(choices=PLAZO_CHOICES, required=False)
+    meses_plazo = forms.ChoiceField(choices=PLAZO_CHOICES_FORM, required=False)
     monto_solicitado = forms.CharField(required=False)
     empresa = forms.CharField(required=False)
     cantidad_pagos = forms.CharField(required=False)

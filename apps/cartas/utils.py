@@ -51,7 +51,7 @@ class ObtenerDatosPDFMixin(object):
     def convertir_csv(self, ruta_pdf):
             df = tabula.read_pdf(ruta_pdf ,multiple_tables=True)
             # Convertimos el archivo a formato CSV y lo guardamos 
-            ruta_csv = os.path.join(BASE, str("archivo.csv"))
+            ruta_csv = os.path.join(BASE, str("reporte_pensionado_actual.csv"))
             ruta_csv = ruta_csv.replace('/apps','')
             tabula.convert_into(ruta_pdf, ruta_csv, output_format="csv", stream=True, pages=1)
 
@@ -93,13 +93,16 @@ class ObtenerDatosPDFMixin(object):
 
         curp_titulo = numpy.where(contenido_array == 'CURP')
         curp = self.contenido[curp_titulo[0][0] - 1][4]
+        if curp == '':
+            curp = self.contenido[curp_titulo[0][0] - 1][3]
         fecha_nacimiento_curp = curp[4:10]
         # Se espera que todos los registros contengan una fecha de nacimiento a mayor al año 2000 (en el 2020)
         # el CURP solo devuelve 2 dígitos del año de nacimiento, agregamos manualmente el 19** faltante
-        print(fecha_nacimiento_curp)
-        print(fecha_nacimiento_curp[0:2])
-        print(fecha_nacimiento_curp[2:4])
-        print(fecha_nacimiento_curp[4:])
+        # print(fecha_nacimiento_curp)
+        # print(fecha_nacimiento_curp[0:2])
+        # print(fecha_nacimiento_curp[2:4])
+        # print(fecha_nacimiento_curp[4:])
+
         try:
             fecha_nacimiento = date(int('19' + fecha_nacimiento_curp[0:2]), int(fecha_nacimiento_curp[2:4]), int(fecha_nacimiento_curp[4:]))
         except:
@@ -119,14 +122,13 @@ class ObtenerDatosPDFMixin(object):
         deuda_concepto = numpy.where(numpy.char.find(contenido_array, '301 PRESTAMO')>=0)
 
         if deuda_concepto[0].any():
-            deuda_empresa = self.contenido[deuda_concepto[0][0]][0][15:]
-            deuda_cantidad_pagos = self.contenido[deuda_concepto[0][0]][3]
-            deuda_cantidad = self.contenido[deuda_concepto[0][0]][4][3:]
+            deuda_empresa = self.contenido[deuda_concepto[0][-1]][0][15:]
+            deuda_cantidad_pagos = self.contenido[deuda_concepto[0][-1]][3]
+            deuda_cantidad = self.contenido[deuda_concepto[0][-1]][4][3:]
 
             self.datos_pensionado['deuda_empresa'] = deuda_empresa
             self.datos_pensionado['deuda_cantidad_pagos'] = deuda_cantidad_pagos
             self.datos_pensionado['deuda_cantidad'] = deuda_cantidad
-
 
         self.datos_pensionado['numero_social'] = numero_social
         self.datos_pensionado['nombre'] = nombre
@@ -177,6 +179,9 @@ class ObtenerDatosPDFMixin(object):
         # BASE = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'media')
         ruta_sobre = os.path.join(BASE, str("formatos/formato_sobre.docx"))
         ruta_sobre = ruta_sobre.replace('/apps','')
+
+        direccion_envio = direccion_envio.replace(', ', ',')
+        direccion_envio = direccion_envio.replace(',', ',\n')
 
         doc = Document(ruta_sobre)
         for p in doc.paragraphs:
@@ -239,11 +244,9 @@ class ObtenerDatosPDFMixin(object):
         csv_f = csv.reader(f)
         for row in csv_f:
             monto = float(row[0][1:].replace(",",""))
-            print(monto)
+
             for i, col in enumerate(row):
                 if i == 1:
-                    print(col)
-                    print(col[1:].replace(",",""))
                     plazo = Plazo.objects.create()
                     plazo.meses_plazo = 24
                     plazo.monto_solicitado = monto

@@ -5,6 +5,14 @@
     <h2>Listado de pensionados</h2>
     <hr class="title">
 </div>
+<ul class="nav nav-tabs">
+    <li role="presentation" class='{% if activo == "todos" %}active{% endif %}' id="todos"><a
+            href="{% url 'cartas:pensionados_list' filtro='todos' %}">Todos</a></li>
+    <li role="presentation" class='{% if activo == "conarchivos" %}active{% endif %}' id="con_carta"><a
+            href="{% url 'cartas:pensionados_list' filtro='conarchivos' %}">Con archivos</a></li>
+    <li role="presentation" class='{% if activo == "sinarchivos" %}active{% endif %}' id="sin_carta"><a
+            href="{% url 'cartas:pensionados_list' filtro='sinarchivos' %}">Sin archivos</a></li>
+</ul>
 
 <div class="table-responsive scroll-table">
     <table class="table table-striped">
@@ -33,17 +41,22 @@
                     <a href="{% url 'cartas:pensionado_detalle' pk=pensionado.pk %}"><span
                             class="glyphicon glyphicon-share" aria-hidden="true" data-toggle="tooltip"
                             data-placement="top" title="Ver Detalle"></span></a>
-                    <a><span class="glyphicon glyphicon-file" id="generar_carta" id_pensionado="{{ pensionado.pk }}"
+                    <!-- <a><span class="glyphicon glyphicon-file" id="generar_carta" id_pensionado="{{ pensionado.pk }}"
                             aria-hidden="true" data-toggle="tooltip" data-placement="top"
                             title="Generar carta"></span></a>
                     <a><span class="glyphicon glyphicon-envelope" id="generar_sobre" id_pensionado="{{ pensionado.pk }}"
                             aria-hidden="true" data-toggle="tooltip" data-placement="top"
-                            title="Generar sobre"></span></a>
+                            title="Generar sobre"></span></a> -->
+                    <a><span class="glyphicon glyphicon-envelope" id="generar_archivos"
+                            id_pensionado="{{ pensionado.pk }}" aria-hidden="true" data-toggle="tooltip"
+                            data-placement="top" title="Generar archivos"></span></a>
                 </td>
             </tr>
             {% endfor %}
             {% else %}
-            <p>No hay pensionados dados de alta.</p>
+            <tr class="text-center">
+                <td colspan="7">No hay pensionados dados de alta.</td>
+            </tr>
             {% endif %}
         </tbody>
     </table>
@@ -68,55 +81,4 @@
     </ul>
     {% endif %}
 </nav>
-{% endblock %}
-{% block extrajs %}
-<script>
-    $("body").on('click', '#generar_carta', function () {
-        var id_pensionado = $(this).attr('id_pensionado');
-
-        $.ajax({
-            url: '/pensionado/generar-carta/',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                'id_pensionado': id_pensionado
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                alert("Carta generada correctamente.");
-            },
-            error: function (data) {
-                if (data.responseJSON.message) {
-                    alert(data.responseJSON.message);
-                } else {
-                    alert('Ocurrió un error al generar la carta. Pregúntale a Orlando.');
-                }
-            }
-        });
-    });
-
-    $("body").on('click', '#generar_sobre', function () {
-        var id_pensionado = $(this).attr('id_pensionado');
-
-        $.ajax({
-            url: '/pensionado/generar-sobre/',
-            data: {
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                'id_pensionado': id_pensionado
-            },
-            type: 'POST',
-            dataType: 'json',
-            success: function (data) {
-                alert("Sobre generado correctamente.");
-            },
-            error: function (data) {
-                if (data.responseJSON.message) {
-                    alert(data.responseJSON.message);
-                } else {
-                    alert('Ocurrió un error al generar el sobre. Pregúntale a Orlando.');
-                }
-            }
-        });
-    });
-</script>
 {% endblock %}

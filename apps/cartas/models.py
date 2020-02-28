@@ -13,12 +13,14 @@ PLAZO_CHOICES =(
 
 class Pensionado(models.Model):
 
-    numero_social = models.CharField(max_length=20, blank=True)
+    numero_social = models.CharField(max_length=20, blank=True) 
     nombre = models.CharField(max_length=100, blank=True)
     edad = models.IntegerField(null=True, blank=True)
     direccion = models.CharField(max_length=200, blank=True)
     estado = models.CharField(max_length=50, blank=True)
     ciudad = models.CharField(max_length=50, blank=True)
+    carta_generada = models.BooleanField(default=False, blank=True)
+    sobre_generado = models.BooleanField(default=False, blank=True)
     creado = models.DateTimeField(default=timezone.now)
     actualizado = models.DateTimeField(auto_now_add=True)
     estatus_registro = models.IntegerField(default=0)

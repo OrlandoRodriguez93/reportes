@@ -32,7 +32,6 @@ class RegistroCreateView(UpdateView):
     template_name = "cartas/pensionado_actualizar.html"
     model = Pensionado
     form_class = PensionadoForm
-    success_url = "cartas/pensionados_listado.html"
     credito = None
     deuda = None
     plazo = None
@@ -148,9 +147,29 @@ class PensionadoListView(ListView):
     context_object_name = 'pensionados'
     template_name = "cartas/pensionados_listado.html"
     ordering = ['-creado']
+    active = 'todos'
 
     def get_queryset(self):
-        return Pensionado.objects.filter(estatus_registro=0)
+        filtro = self.kwargs['filtro']
+
+        if filtro == 'conarchivos':
+            pensionados = Pensionado.objects.filter(carta_generada=True, sobre_generado=True, estatus_registro=0).order_by('-creado')
+            self.active = 'conarchivos'
+        elif filtro == 'sinarchivos':
+            pensionados = Pensionado.objects.filter(carta_generada=False, sobre_generado=False, estatus_registro=0).order_by('-creado')
+            self.active = 'sinarchivos'
+        else:
+            pensionados = Pensionado.objects.filter(estatus_registro=0)
+            self.active = 'todos'
+        return pensionados
+
+    def get_context_data(self, **kwargs):
+        context = super(PensionadoListView, self).get_context_data(**kwargs)
+        context['activo'] = self.active
+        return context
+
+    # def get_queryset(self):
+    #     return Pensionado.objects.filter(estatus_registro=0)
 
 class PensionadoDetailView(DetailView):
     model = Pensionado
@@ -200,6 +219,7 @@ class LeerReporteView(CreateView, FormMixin, ObtenerDatosPDFMixin):
         return context
 
     def form_valid(self, form):
+        self.datos_pensionado = {}
         self.object = form.save(commit=False)
         self.object.save()
 
@@ -230,8 +250,9 @@ class LeerReporteView(CreateView, FormMixin, ObtenerDatosPDFMixin):
         credito.capacidad = float(capacidad)
         credito.liquido = float(liquido)
         credito.save()
-
+        
         if 'deuda_empresa' in self.datos_pensionado:
+
             deuda = Deuda.objects.create()
             deuda.id_pensionado = pensionado.pk
             deuda.empresa = self.datos_pensionado['deuda_empresa']
@@ -239,8 +260,6 @@ class LeerReporteView(CreateView, FormMixin, ObtenerDatosPDFMixin):
             cantidad = self.datos_pensionado['deuda_cantidad'].replace(",","")
             deuda.cantidad = float(cantidad)
             deuda.save()
-        #modificar
-        # self.sobreescribir_carta(pensionado.nombre, str(credito.capacidad))
 
         return redirect(reverse('cartas:pensionado_actualizar', kwargs={'pk':pensionado.pk}))
 
@@ -294,37 +313,61 @@ class AltaPlazos(CreateView, FormMixin, ObtenerDatosPDFMixin):
 
         return redirect(reverse('cartas:plazos_list'))
 
-class GenerarCartaView(ObtenerDatosPDFMixin, View):
+# class GenerarCartaView(ObtenerDatosPDFMixin, View):
     
+#     def post(self, request, *args, **kwargs):
+#         id_pensionado = request.POST.get('id_pensionado')
+#         try:
+#             credito = Credito.objects.get(id_pensionado=id_pensionado)
+#             plazo = Plazo.objects.get(pk=credito.id_plazo)
+#         except ObjectDoesNotExist:
+#             mensaje = "No existe un plazo para este pensionado. Selecciona un plazo en el detalle del pensionado."
+#             return JsonResponse({"success":False, "message":mensaje}, status=400)
+
+#         try:    
+#             pensionado = Pensionado.objects.get(pk=id_pensionado)
+#             self.sobreescribir_carta(pensionado.nombre, str(plazo.monto_solicitado))
+#         except:
+#             mensaje = "No se pudo generar la carta para el pensionado."
+#             return JsonResponse({"success":False, "message":mensaje}, status=400)
+#         return JsonResponse({"success":True}, status=200)
+
+
+# class GenerarSobreView(ObtenerDatosPDFMixin, View):
+    
+#     def post(self, request, *args, **kwargs):
+#         id_pensionado = request.POST.get('id_pensionado')
+#         try:    
+#             pensionado = Pensionado.objects.get(pk=id_pensionado)
+#             self.sobreescribir_sobre(pensionado.nombre, pensionado.direccion)
+#         except:
+#             mensaje = "No se pudo generar el sobre para el pensionado."
+#             return JsonResponse({"success":False, "message":mensaje}, status=400)
+#         return JsonResponse({"success":True}, status=200)
+
+class GenerarArchivosPensionadoView(ObtenerDatosPDFMixin, View):
     def post(self, request, *args, **kwargs):
         id_pensionado = request.POST.get('id_pensionado')
+        # Buscamos el plazo y el monto del credito para el pensionado
         try:
             credito = Credito.objects.get(id_pensionado=id_pensionado)
             plazo = Plazo.objects.get(pk=credito.id_plazo)
         except ObjectDoesNotExist:
             mensaje = "No existe un plazo para este pensionado. Selecciona un plazo en el detalle del pensionado."
             return JsonResponse({"success":False, "message":mensaje}, status=400)
-
+        # Obtenemos el pensionado y generamos la carta y el sobre
         try:    
             pensionado = Pensionado.objects.get(pk=id_pensionado)
             self.sobreescribir_carta(pensionado.nombre, str(plazo.monto_solicitado))
-        except:
-            mensaje = "No se pudo generar la carta para el pensionado."
-            return JsonResponse({"success":False, "message":mensaje}, status=400)
-        return JsonResponse({"success":True}, status=200)
-
-
-class GenerarSobreView(ObtenerDatosPDFMixin, View):
-    
-    def post(self, request, *args, **kwargs):
-        id_pensionado = request.POST.get('id_pensionado')
-        try:    
-            pensionado = Pensionado.objects.get(pk=id_pensionado)
             self.sobreescribir_sobre(pensionado.nombre, pensionado.direccion)
+            pensionado.carta_generada = True
+            pensionado.sobre_generado = True
+            pensionado.save(update_fields=['carta_generada', 'sobre_generado'])
         except:
-            mensaje = "No se pudo generar el sobre para el pensionado."
+            mensaje = "Algún archivo no pudo ser generado correctamente."
             return JsonResponse({"success":False, "message":mensaje}, status=400)
         return JsonResponse({"success":True}, status=200)
+
 
 class BuscarMontoPlazoView(View):
     
